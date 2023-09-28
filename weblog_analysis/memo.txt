@@ -1,0 +1,29 @@
+File Read 후 Linq로 
+
+Split vs Regex Split 성능 비교
+
+첫줄만 패턴 감지해서 자동으로 순번 체크 후 split는 그다음
+
+
+서버
+  ㄴ web
+      ㄴ nginx1
+      ㄴ nginx2
+  ㄴ was
+      ㄴ tomcat1
+
+
+https://www.measurethat.net/Benchmarks/Show/4781/0/split-vs-regex
+https://stackoverflow.com/questions/3601465/string-split-vs-regex-split
+https://httpd.apache.org/docs/2.4/ko/logs.html
+https://naver.me/5ITV5F9S
+
+
+
+
+
+
+
+
+
+
