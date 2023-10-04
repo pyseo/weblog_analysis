@@ -29,21 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Server");
-            this.btnSelectDirectory = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.tbxResultDirectoryPath = new System.Windows.Forms.TextBox();
-            this.btnSearchFilePath = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbxOriginalFilePath = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.lbSiteNm = new System.Windows.Forms.Label();
-            this.lbServerNm = new System.Windows.Forms.Label();
-            this.lbInstanceNm = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.lbLogFiles = new System.Windows.Forms.Label();
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Server");
             this.mnsMain = new System.Windows.Forms.MenuStrip();
             this.파일ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.새로그파일열기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,165 +45,31 @@
             this.ctxmiModify = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxmiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.lvLogFile = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colFilePath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colCreateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colUpdateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.tbIncludePattern = new System.Windows.Forms.TextBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.colCreateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colUpdateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tableLayoutPanel1.SuspendLayout();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.tbExcludePattern = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.cbxAnalysisTerm = new System.Windows.Forms.ComboBox();
             this.mnsMain.SuspendLayout();
             this.ctxmServerTree.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnSelectDirectory
-            // 
-            this.btnSelectDirectory.Location = new System.Drawing.Point(652, 65);
-            this.btnSelectDirectory.Name = "btnSelectDirectory";
-            this.btnSelectDirectory.Size = new System.Drawing.Size(66, 23);
-            this.btnSelectDirectory.TabIndex = 42;
-            this.btnSelectDirectory.Text = "폴더지정";
-            this.btnSelectDirectory.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(16, 67);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(77, 12);
-            this.label5.TabIndex = 41;
-            this.label5.Text = "결과폴더경로";
-            // 
-            // tbxResultDirectoryPath
-            // 
-            this.tbxResultDirectoryPath.Location = new System.Drawing.Point(110, 64);
-            this.tbxResultDirectoryPath.Name = "tbxResultDirectoryPath";
-            this.tbxResultDirectoryPath.Size = new System.Drawing.Size(536, 21);
-            this.tbxResultDirectoryPath.TabIndex = 40;
-            // 
-            // btnSearchFilePath
-            // 
-            this.btnSearchFilePath.Location = new System.Drawing.Point(652, 35);
-            this.btnSearchFilePath.Name = "btnSearchFilePath";
-            this.btnSearchFilePath.Size = new System.Drawing.Size(66, 23);
-            this.btnSearchFilePath.TabIndex = 39;
-            this.btnSearchFilePath.Text = "파일찾기";
-            this.btnSearchFilePath.UseVisualStyleBackColor = true;
-            this.btnSearchFilePath.Click += new System.EventHandler(this.btnSearchFilePath_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 12);
-            this.label1.TabIndex = 38;
-            this.label1.Text = "로그파일경로";
-            // 
-            // tbxOriginalFilePath
-            // 
-            this.tbxOriginalFilePath.Location = new System.Drawing.Point(110, 34);
-            this.tbxOriginalFilePath.Name = "tbxOriginalFilePath";
-            this.tbxOriginalFilePath.Size = new System.Drawing.Size(536, 21);
-            this.tbxOriginalFilePath.TabIndex = 37;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.42466F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76.57534F));
-            this.tableLayoutPanel1.Controls.Add(this.textBox3, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBox2, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lbSiteNm, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lbServerNm, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.lbInstanceNm, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.lbLogFiles, 0, 4);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(18, 578);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(730, 184);
-            this.tableLayoutPanel1.TabIndex = 43;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox3.Location = new System.Drawing.Point(174, 64);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(239, 21);
-            this.textBox3.TabIndex = 50;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox2.Location = new System.Drawing.Point(174, 34);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(239, 21);
-            this.textBox2.TabIndex = 49;
-            // 
-            // lbSiteNm
-            // 
-            this.lbSiteNm.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lbSiteNm.AutoSize = true;
-            this.lbSiteNm.Location = new System.Drawing.Point(3, 9);
-            this.lbSiteNm.Name = "lbSiteNm";
-            this.lbSiteNm.Size = new System.Drawing.Size(64, 12);
-            this.lbSiteNm.TabIndex = 44;
-            this.lbSiteNm.Text = "Site Name";
-            // 
-            // lbServerNm
-            // 
-            this.lbServerNm.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lbServerNm.AutoSize = true;
-            this.lbServerNm.Location = new System.Drawing.Point(3, 39);
-            this.lbServerNm.Name = "lbServerNm";
-            this.lbServerNm.Size = new System.Drawing.Size(79, 12);
-            this.lbServerNm.TabIndex = 45;
-            this.lbServerNm.Text = "Server Name";
-            // 
-            // lbInstanceNm
-            // 
-            this.lbInstanceNm.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lbInstanceNm.AutoSize = true;
-            this.lbInstanceNm.Location = new System.Drawing.Point(3, 69);
-            this.lbInstanceNm.Name = "lbInstanceNm";
-            this.lbInstanceNm.Size = new System.Drawing.Size(91, 12);
-            this.lbInstanceNm.TabIndex = 46;
-            this.lbInstanceNm.Text = "Instance Name";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox1.Location = new System.Drawing.Point(174, 4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(239, 21);
-            this.textBox1.TabIndex = 48;
-            // 
-            // lbLogFiles
-            // 
-            this.lbLogFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lbLogFiles.AutoSize = true;
-            this.lbLogFiles.Location = new System.Drawing.Point(3, 146);
-            this.lbLogFiles.Name = "lbLogFiles";
-            this.lbLogFiles.Size = new System.Drawing.Size(57, 12);
-            this.lbLogFiles.TabIndex = 47;
-            this.lbLogFiles.Text = "Log Files";
             // 
             // mnsMain
             // 
@@ -290,16 +142,18 @@
             // tvServerList
             // 
             this.tvServerList.AllowDrop = true;
-            this.tvServerList.Location = new System.Drawing.Point(18, 162);
+            this.tvServerList.Location = new System.Drawing.Point(18, 61);
             this.tvServerList.Name = "tvServerList";
-            treeNode3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            treeNode3.Name = "root";
-            treeNode3.Text = "Server";
-            treeNode3.ToolTipText = "root";
+            treeNode1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            treeNode1.Name = "root";
+            treeNode1.Text = "Server";
+            treeNode1.ToolTipText = "root";
             this.tvServerList.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
-            this.tvServerList.Size = new System.Drawing.Size(232, 184);
+            treeNode1});
+            this.tvServerList.Size = new System.Drawing.Size(218, 184);
             this.tvServerList.TabIndex = 45;
+            this.tvServerList.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvServerList_AfterLabelEdit);
+            this.tvServerList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServerList_AfterSelect);
             this.tvServerList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvServerList_NodeMouseClick);
             this.tvServerList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvServerList_MouseDown);
             // 
@@ -335,19 +189,33 @@
             // 
             // lvLogFile
             // 
+            this.lvLogFile.CheckBoxes = true;
             this.lvLogFile.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
             this.colFileName,
             this.colFilePath,
             this.colFileSize,
             this.colCreateTime,
             this.colUpdateTime});
+            this.lvLogFile.FullRowSelect = true;
+            this.lvLogFile.GridLines = true;
             this.lvLogFile.HideSelection = false;
-            this.lvLogFile.Location = new System.Drawing.Point(256, 162);
+            this.lvLogFile.Location = new System.Drawing.Point(241, 61);
             this.lvLogFile.Name = "lvLogFile";
-            this.lvLogFile.Size = new System.Drawing.Size(753, 184);
+            this.lvLogFile.OwnerDraw = true;
+            this.lvLogFile.Size = new System.Drawing.Size(768, 184);
             this.lvLogFile.TabIndex = 46;
             this.lvLogFile.UseCompatibleStateImageBehavior = false;
             this.lvLogFile.View = System.Windows.Forms.View.Details;
+            this.lvLogFile.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvLogFile_ColumnClick);
+            this.lvLogFile.DrawColumnHeader += new System.Windows.Forms.DrawListViewColumnHeaderEventHandler(this.lvLogFile_DrawColumnHeader);
+            this.lvLogFile.DrawItem += new System.Windows.Forms.DrawListViewItemEventHandler(this.lvLogFile_DrawItem);
+            this.lvLogFile.DrawSubItem += new System.Windows.Forms.DrawListViewSubItemEventHandler(this.lvLogFile_DrawSubItem);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "";
+            this.columnHeader1.Width = 30;
             // 
             // colFileName
             // 
@@ -364,119 +232,6 @@
             this.colFileSize.Text = "FileSize";
             this.colFileSize.Width = 113;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 120);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(107, 12);
-            this.label2.TabIndex = 47;
-            this.label2.Text = "[Server Structure]";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(580, 133);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(66, 23);
-            this.button1.TabIndex = 48;
-            this.button1.Text = "추가";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(652, 133);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(66, 23);
-            this.button2.TabIndex = 49;
-            this.button2.Text = "제거";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(801, 506);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(66, 23);
-            this.button3.TabIndex = 50;
-            this.button3.Text = "분석";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.42466F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76.57534F));
-            this.tableLayoutPanel2.Controls.Add(this.textBox4, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.textBox5, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label3, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.label4, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label6, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.textBox6, 1, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(18, 359);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 6;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(730, 184);
-            this.tableLayoutPanel2.TabIndex = 51;
-            // 
-            // textBox4
-            // 
-            this.textBox4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox4.Location = new System.Drawing.Point(174, 64);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(239, 21);
-            this.textBox4.TabIndex = 50;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox5.Location = new System.Drawing.Point(174, 34);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(239, 21);
-            this.textBox5.TabIndex = 49;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 12);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "ㅇㄹㄹ";
-            // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 39);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(79, 12);
-            this.label4.TabIndex = 45;
-            this.label4.Text = "Server Name";
-            // 
-            // label6
-            // 
-            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 69);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(91, 12);
-            this.label6.TabIndex = 46;
-            this.label6.Text = "Instance Name";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.textBox6.Location = new System.Drawing.Point(174, 4);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(239, 21);
-            this.textBox6.TabIndex = 48;
-            // 
             // colCreateTime
             // 
             this.colCreateTime.Text = "CreateTime";
@@ -487,11 +242,184 @@
             this.colUpdateTime.Text = "UpdateTime";
             this.colUpdateTime.Width = 103;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(16, 34);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 12);
+            this.label2.TabIndex = 47;
+            this.label2.Text = "[Server Log Files]";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(871, 251);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(66, 23);
+            this.button1.TabIndex = 48;
+            this.button1.Text = "파일추가";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.btnSearchFilePath_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(943, 251);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(66, 23);
+            this.button2.TabIndex = 49;
+            this.button2.Text = "제거";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(943, 499);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(66, 23);
+            this.button3.TabIndex = 50;
+            this.button3.Text = "분석";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label3.Location = new System.Drawing.Point(3, 3);
+            this.label3.Margin = new System.Windows.Forms.Padding(3);
+            this.label3.Name = "label3";
+            this.tableLayoutPanel2.SetRowSpan(this.label3, 2);
+            this.label3.Size = new System.Drawing.Size(104, 54);
+            this.label3.TabIndex = 44;
+            this.label3.Text = "df";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // tbIncludePattern
+            // 
+            this.tbIncludePattern.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tbIncludePattern.Location = new System.Drawing.Point(223, 64);
+            this.tbIncludePattern.Name = "tbIncludePattern";
+            this.tbIncludePattern.Size = new System.Drawing.Size(380, 21);
+            this.tbIncludePattern.TabIndex = 50;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.cbxAnalysisTerm, 2, 1);
+            this.tableLayoutPanel2.Controls.Add(this.label4, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label3, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tbIncludePattern, 2, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label8, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label9, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.tbExcludePattern, 2, 3);
+            this.tableLayoutPanel2.Controls.Add(this.label6, 1, 1);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(18, 300);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 6;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(991, 184);
+            this.tableLayoutPanel2.TabIndex = 51;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Location = new System.Drawing.Point(3, 63);
+            this.label4.Margin = new System.Windows.Forms.Padding(3);
+            this.label4.Name = "label4";
+            this.tableLayoutPanel2.SetRowSpan(this.label4, 2);
+            this.label4.Size = new System.Drawing.Size(104, 54);
+            this.label4.TabIndex = 51;
+            this.label4.Text = "Content Pattern";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(113, 39);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 12);
+            this.label6.TabIndex = 52;
+            this.label6.Text = "Analysis Term";
+            // 
+            // label8
+            // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(113, 69);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(89, 12);
+            this.label8.TabIndex = 53;
+            this.label8.Text = "Include Pattern";
+            // 
+            // label9
+            // 
+            this.label9.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(113, 99);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(94, 12);
+            this.label9.TabIndex = 54;
+            this.label9.Text = "Exclude Pattern";
+            // 
+            // tbExcludePattern
+            // 
+            this.tbExcludePattern.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.tbExcludePattern.Location = new System.Drawing.Point(223, 94);
+            this.tbExcludePattern.Name = "tbExcludePattern";
+            this.tbExcludePattern.Size = new System.Drawing.Size(380, 21);
+            this.tbExcludePattern.TabIndex = 55;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(16, 285);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 12);
+            this.label7.TabIndex = 52;
+            this.label7.Text = "[Option]";
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(943, 32);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(66, 23);
+            this.btnSave.TabIndex = 53;
+            this.btnSave.Text = "저장";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // cbxAnalysisTerm
+            // 
+            this.cbxAnalysisTerm.FormattingEnabled = true;
+            this.cbxAnalysisTerm.Items.AddRange(new object[] {
+            "5",
+            "10",
+            "15",
+            "20",
+            "30",
+            "60"});
+            this.cbxAnalysisTerm.Location = new System.Drawing.Point(223, 33);
+            this.cbxAnalysisTerm.Name = "cbxAnalysisTerm";
+            this.cbxAnalysisTerm.Size = new System.Drawing.Size(61, 20);
+            this.cbxAnalysisTerm.TabIndex = 54;
+            // 
             // analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1076, 774);
+            this.ClientSize = new System.Drawing.Size(1076, 629);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -499,20 +427,11 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lvLogFile);
             this.Controls.Add(this.tvServerList);
-            this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.btnSelectDirectory);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.tbxResultDirectoryPath);
-            this.Controls.Add(this.btnSearchFilePath);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tbxOriginalFilePath);
             this.Controls.Add(this.mnsMain);
             this.MainMenuStrip = this.mnsMain;
             this.Name = "analysis";
             this.Text = "Web Log Analysis";
             this.Load += new System.EventHandler(this.analysis_Load);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.mnsMain.ResumeLayout(false);
             this.mnsMain.PerformLayout();
             this.ctxmServerTree.ResumeLayout(false);
@@ -524,21 +443,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnSelectDirectory;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox tbxResultDirectoryPath;
-        private System.Windows.Forms.Button btnSearchFilePath;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbxOriginalFilePath;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label lbSiteNm;
-        private System.Windows.Forms.Label lbServerNm;
-        private System.Windows.Forms.Label lbInstanceNm;
-        private System.Windows.Forms.Label lbLogFiles;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.MenuStrip mnsMain;
         private System.Windows.Forms.ToolStripMenuItem 파일ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 새로그파일열기ToolStripMenuItem;
@@ -560,16 +464,21 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.ColumnHeader colFileSize;
         private System.Windows.Forms.ColumnHeader colCreateTime;
         private System.Windows.Forms.ColumnHeader colUpdateTime;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.TextBox tbIncludePattern;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tbExcludePattern;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.ComboBox cbxAnalysisTerm;
     }
 }
 

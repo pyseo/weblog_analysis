@@ -4,10 +4,40 @@ Tree View Control
 https://learn.microsoft.com/ko-kr/dotnet/desktop/winforms/controls/how-to-attach-a-shortcut-menu-to-a-treeview-node?view=netframeworkdesktop-4.8
 https://stackoverflow.com/questions/14208944/c-sharp-right-click-on-treeview-nodes
 https://learn.microsoft.com/ko-kr/dotnet/desktop/winforms/controls/creating-an-explorer-style-interface-with-the-listview-and-treeview?view=netframeworkdesktop-4.8
+https://hyokim.tistory.com/16
+https://learn.microsoft.com/ko-kr/dotnet/api/system.windows.forms.listview.ownerdraw?view=windowsdesktop-7.0
+
+Tree node tag usage
+https://blog.naver.com/sch1773/220966269591
 
 Openfile dialog
 https://learn.microsoft.com/ko-kr/dotnet/api/system.windows.forms.openfiledialog.multiselect?view=windowsdesktop-7.0
 https://mirwebma.tistory.com/121
 
+File I/O (File, Directory, Path)
+https://lightgg.tistory.com/29
+
 Get Project / Solution Dir
 https://windstop.tistory.com/40
+
+
+Combobox
+https://stackoverflow.com/questions/28642507/combobox-selectedindex-does-n
+ot-appear-in-properties-window-c-form-vs-2013
+
+ini file
+https://m.blog.naver.com/dnjswls23/222608228536
+
+
+string
+https://kwange.tistory.com/178
+
+large file read
+https://cc.davelozinski.com/c-sharp/fastest-way-to-read-text-files
+https://stackoverflow.com/questions/2161895/reading-large-text-files-with-streams-in-c-sharp
+
+newtonjson usage
+https://www.newtonsoft.com/json/help/html/WriteToJsonFile.htm
+https://afsdzvcx123.tistory.com/entry/C-%EB%AC%B8%EB%B2%95-C-JSON-%ED%8C%8C%EC%9D%BC-%EC%83%9D%EC%84%B1-%EC%93%B0%EA%B8%B0-%EC%9D%BD%EA%B8%B0
+https://s-engineer.tistory.com/337
+https://stackoverflow.com/questions/38558844/jcontainer-jobject-jtoken-and-linq-confusion

@@ -1,5 +1,33 @@
-{
-  "Name": "Server",
-  "Type": "root",
-  "leaf": []
-}
+[
+  {
+    "name": "app1",
+    "files": null,
+    "children": [
+      {
+        "name": "inst1",
+        "files": [
+          {
+            "filename": "a",
+            "filepath": "root/a",
+            "size": "1231",
+            "created": "2023-11-10 00:00:01",
+            "updated": "2023-11-10 00:00:03"
+          },
+          {
+            "filename": "b",
+            "filepath": "root/b",
+            "size": "9230",
+            "created": "2023-12-10 00:00:01",
+            "updated": "2023-12-10 00:00:03"
+          }
+        ],
+        "children": null
+      }
+    ]
+  },
+  {
+    "name": "app2",
+    "files": null,
+    "children": null
+  }
+]

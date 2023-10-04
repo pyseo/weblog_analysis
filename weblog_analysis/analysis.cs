@@ -9,6 +9,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,23 +21,32 @@ namespace weblog_analysis
 {
     public partial class analysis : Form
     {
-        const int treeDepthLimit = 3;
+        private const int treeDepthLimit = 3;
         private TreeNode tnSelectNode = null;
         private JToken settingJson = null;
+        private JObject selectJObject = null;
+
+        [DllImport("kernel32")]
+        private static extern long WritePrivateProfileString(string section, string key, string val, string filepath);
+
+        [DllImport("kernel32")]
+        private static extern long GetPrivateProfileString(string section, string key, string def, StringBuilder reVal, int size, string filepath);
+
+        [DllImport("kernel32")]
+        private static extern long GetPrivateProfileString(string section, string key, string def, string reVal, int size, string filepath);
 
         public analysis()
         {
             InitializeComponent();
-
-            // to-do
-            // setting json load
-
             InitializeSetting();
         }
 
         private void InitializeSetting()
         {
-            string rootDir = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
+            // json file
+            //string rootDir = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
+            //string rootDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string rootDir = Environment.CurrentDirectory;
             string jsonFile = Path.Combine(rootDir, "setting.json");
 
             if (File.Exists(jsonFile))
@@ -52,25 +63,45 @@ namespace weblog_analysis
             else
             {
                 settingJson = new JObject(
-                    new JProperty("Name", "Server"),
-                    new JProperty("Type", "root"),
-                    new JProperty("leaf", new JArray[] { })
+                    new JProperty("Server", null)
                 );
 
                 File.WriteAllText(jsonFile, settingJson.ToString());
             }
 
-            DisplayTreeView(settingJson, "root");
+            DisplayTreeView(settingJson);
+
+
+            // ini file
+            string iniFile = Path.Combine(rootDir, "setting.ini");
+            if (!File.Exists(iniFile))
+            {
+                WritePrivateProfileString("pattern", "include", ".do;.jsp", iniFile);
+                WritePrivateProfileString("pattern", "exclude", ".js;.css;.gif;.png;.jpg;.ico;.jpe;.jpeg;.bmp;.tif;.tiff;.html;.htm", iniFile);
+                WritePrivateProfileString("option", "analysis_term(min)", "5", iniFile);
+            }
+
+            StringBuilder sbValue = new StringBuilder(512);
+            GetPrivateProfileString("pattern", "include", "", sbValue, sbValue.Capacity, iniFile);
+            tbIncludePattern.Text = sbValue.ToString();
+
+            sbValue.Clear();
+            GetPrivateProfileString("pattern", "exclude", "", sbValue, sbValue.Capacity, iniFile);
+            tbExcludePattern.Text = sbValue.ToString();
+
+            // term
+            sbValue.Clear();
+            GetPrivateProfileString("option", "analysis_term(min)", "", sbValue, sbValue.Capacity, iniFile);
+            cbxAnalysisTerm.SelectedIndex = cbxAnalysisTerm.Items.IndexOf(sbValue.ToString());
         }
 
-        private void DisplayTreeView(JToken root, string rootName)
+        private void DisplayTreeView(JToken root)
         {
             tvServerList.BeginUpdate();
             try
             {
                 tvServerList.Nodes.Clear();
-                TreeNode tNode = tvServerList.Nodes[tvServerList.Nodes.Add(new TreeNode(rootName))];
-                tNode.Tag = root;
+                TreeNode tNode = tvServerList.Nodes[tvServerList.Nodes.Add(new TreeNode("Server"))];
 
                 AddNode(root, tNode);
 
@@ -86,29 +117,33 @@ namespace weblog_analysis
         {
             if (token == null)
                 return;
-            if (token is JValue)
+            
+            if (token is JObject && token.HasValues)
             {
-                var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(token.ToString()))];
-                childNode.Tag = token;
-            }
-            else if (token is JObject)
-            {
-                var obj = (JObject)token;
-                foreach (var property in obj.Properties())
+                JObject obj = (JObject)token;
+
+                if (obj["name"] != null)
                 {
-                    var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(property.Name))];
-                    childNode.Tag = property;
-                    AddNode(property.Value, childNode);
+                    string childrenName = obj.Property("name").Value.ToString();
+                    TreeNode childrenNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(childrenName))];
+                    //childrenNode.Tag = obj.Property("files").Value;
+                    childrenNode.Tag = token;
+
+                    AddNode(obj.Property("children").Value, childrenNode);
                 }
             }
             else if (token is JArray)
             {
                 var array = (JArray)token;
-                for (int i = 0; i < array.Count; i++)
+
+                foreach (JObject obj in array)
                 {
-                    var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(i.ToString()))];
-                    childNode.Tag = array[i];
-                    AddNode(array[i], childNode);
+                    string childrenName = obj.Property("name").Value.ToString();
+                    TreeNode childrenNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(childrenName))];
+                    //childrenNode.Tag = obj.Property("files").Value;
+                    childrenNode.Tag = token;
+
+                    AddNode(obj.Property("children").Value, childrenNode);
                 }
             }
             else
@@ -126,17 +161,6 @@ namespace weblog_analysis
         {
             tvServerList.SelectedNode = e.Node;
             int level = e.Node.Level;
-
-            // ListView Item
-            if (e.Node.Parent == null)
-            {
-                lvLogFile.Items.Clear();
-                ListViewItem lvItem = new ListViewItem(new string[] { "fileName Sample", "filePath Sample" });
-                lvItem.Tag = "object?";
-                lvLogFile.Items.Add(lvItem);
-
-                
-            }
             
             if (e.Button == MouseButtons.Right && e.Node.Bounds.Contains(e.Location))
             {
@@ -148,7 +172,7 @@ namespace weblog_analysis
                     ctxmiDelete.Visible = false;
                     ctxmServerTree.Show(tvServerList, e.Location);
                 }
-                // child (not last leaf)
+                // children (not last leaf)
                 else if (level < treeDepthLimit)
                 {
                     ctxmiAdd.Visible = true;
@@ -176,6 +200,35 @@ namespace weblog_analysis
         {
             tnSelectNode = tvServerList.GetNodeAt(e.X, e.Y);
         }
+
+        private void tvServerList_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            lvLogFile.Items.Clear();
+
+            TreeNode currentNode = e.Node;
+
+            if (currentNode.Tag != null && ((JArray)((JObject)currentNode.Tag).Property("files").Value).Count > 0)
+            {
+                JArray files = (JArray)((JObject)currentNode.Tag).Property("files").Value;
+
+                foreach (JObject file in files)
+                {
+                    string[] data = new string[]
+                    {
+                        "",
+                        file.Property("filename").Value.ToString(),
+                        file.Property("filepath").Value.ToString(),
+                        file.Property("size").Value.ToString(),
+                        file.Property("created").Value.ToString(),
+                        file.Property("updated").Value.ToString()
+                    };
+
+                    ListViewItem lvItem = new ListViewItem( data);
+                    lvLogFile.Items.Add(lvItem);
+                }
+            }
+        }
+
 
         private void ctxmiAdd_Click(object sender, EventArgs e)
         {
@@ -214,13 +267,35 @@ namespace weblog_analysis
 
             if (tnSelectNode != null && tnParentNode != null)
             {
-                DialogResult result = MessageBox.Show("Are you want to delete the node?\n(Warning!! Include child node)", "Node delete", MessageBoxButtons.OKCancel);
+                DialogResult result = MessageBox.Show("Are you want to delete the node?\n(Warning!! Include children node)", "Node delete", MessageBoxButtons.OKCancel);
                 
                 if (result == DialogResult.OK)
                 {
                     tnParentNode.Nodes.Remove(tnSelectNode);
                     tvServerList.SelectedNode = tnParentNode;
                 }
+            }
+        }
+
+        private void tvServerList_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            JArray children = (JArray)((JObject)tnSelectNode.Tag).Property("children").Value;
+            
+            bool isNew = children.Any(x => ((JObject)x).Property("name").Value.ToString() == e.Node.Text);
+
+            JObject jsonObj = new JObject();
+            jsonObj.Add("name", e.Node.Text);
+            jsonObj.Add("files", null);
+            jsonObj.Add("children", null);
+
+            if (tnSelectNode.Parent is null)
+            {
+                ((JArray)settingJson).Add(jsonObj);
+            }
+            else
+            {
+                
+                children.Add(jsonObj);
             }
         }
 
@@ -242,6 +317,7 @@ namespace weblog_analysis
                 
                 foreach (string file in openFileDialog.FileNames)
                 {
+                    string filename = Path.GetFileName(file);
                     string filepath = Path.Combine(dir, file);
 
                     if (File.Exists(filepath))
@@ -252,16 +328,98 @@ namespace weblog_analysis
                         DateTime dtUpdateTime = info.LastWriteTime;
                         long fileSize = info.Length; // Byte
 
-                        ListViewItem lvItem = new ListViewItem(new string[] { file, Path.Combine(dir, file)
-                                                                            , fileSize.ToString()
-                                                                            , dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                                                                            , dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                                                                            });
+                        string[] data = new string[] { ""
+                                                     , filename
+                                                     , filepath
+                                                     , fileSize.ToString()
+                                                     , dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                     , dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                     };
 
+                        ListViewItem lvItem = new ListViewItem(data);
                         lvLogFile.Items.Add(lvItem);
+
+                        JObject jsonObj = new JObject();
+                        jsonObj.Add("filename", filename);
+                        jsonObj.Add("filepath", filepath);
+                        jsonObj.Add("size", fileSize.ToString());
+                        jsonObj.Add("created", dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                        jsonObj.Add("updated", dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                        JArray files = (JArray)((JObject)tnSelectNode.Tag).Property("files").Value;
+                        files.Add(jsonObj);
                     }
                 }
             }
         }
+
+        private void lvLogFile_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == 0)
+            {
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(this.lvLogFile.Columns[e.Column].Tag);
+                }
+                catch (Exception)
+                {
+                }
+                this.lvLogFile.Columns[e.Column].Tag = !value;
+                foreach (ListViewItem item in this.lvLogFile.Items) item.Checked = !value;
+                this.lvLogFile.Invalidate();
+            }
+        }
+
+        private void lvLogFile_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                e.DrawBackground();
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(e.Header.Tag);
+                }
+                catch (Exception)
+                {
+                }
+                CheckBoxRenderer.DrawCheckBox(e.Graphics, new Point(e.Bounds.Left + 4, e.Bounds.Top + 4),
+                    value ? System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal :
+                    System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
+            }
+            else e.DrawDefault = true;
+        }
+
+        private void lvLogFile_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void lvLogFile_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            string rootDir = Environment.CurrentDirectory;
+            string iniFile = Path.Combine(rootDir, "setting.ini");
+
+            if (File.Exists(iniFile))
+            {
+                WritePrivateProfileString("pattern", "include", tbIncludePattern.Text, iniFile);
+                WritePrivateProfileString("pattern", "exclude", tbExcludePattern.Text, iniFile);
+                WritePrivateProfileString("option", "analysis_term(min)", cbxAnalysisTerm.SelectedItem.ToString(), iniFile);
+            }
+
+            string jsonFile = Path.Combine(rootDir, "setting.json");
+            if (File.Exists(jsonFile))
+            {
+                File.WriteAllText(jsonFile, settingJson.ToString());
+            }
+        }
+
+       
     }
 }
