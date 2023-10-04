@@ -5,5 +5,9 @@ https://learn.microsoft.com/ko-kr/dotnet/desktop/winforms/controls/how-to-attach
 https://stackoverflow.com/questions/14208944/c-sharp-right-click-on-treeview-nodes
 https://learn.microsoft.com/ko-kr/dotnet/desktop/winforms/controls/creating-an-explorer-style-interface-with-the-listview-and-treeview?view=netframeworkdesktop-4.8
 
+Openfile dialog
+https://learn.microsoft.com/ko-kr/dotnet/api/system.windows.forms.openfiledialog.multiselect?view=windowsdesktop-7.0
+https://mirwebma.tistory.com/121
 
-
+Get Project / Solution Dir
+https://windstop.tistory.com/40

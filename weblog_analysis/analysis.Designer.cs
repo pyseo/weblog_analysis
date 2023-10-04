@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Server");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Server");
             this.btnSelectDirectory = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.tbxResultDirectoryPath = new System.Windows.Forms.TextBox();
@@ -61,6 +61,7 @@
             this.lvLogFile = new System.Windows.Forms.ListView();
             this.colFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colFilePath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colFileSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -72,7 +73,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.colDataCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colCreateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colUpdateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tableLayoutPanel1.SuspendLayout();
             this.mnsMain.SuspendLayout();
             this.ctxmServerTree.SuspendLayout();
@@ -112,6 +114,7 @@
             this.btnSearchFilePath.TabIndex = 39;
             this.btnSearchFilePath.Text = "파일찾기";
             this.btnSearchFilePath.UseVisualStyleBackColor = true;
+            this.btnSearchFilePath.Click += new System.EventHandler(this.btnSearchFilePath_Click);
             // 
             // label1
             // 
@@ -151,7 +154,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(730, 184);
             this.tableLayoutPanel1.TabIndex = 43;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // textBox3
             // 
@@ -290,12 +292,12 @@
             this.tvServerList.AllowDrop = true;
             this.tvServerList.Location = new System.Drawing.Point(18, 162);
             this.tvServerList.Name = "tvServerList";
-            treeNode1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            treeNode1.Name = "root";
-            treeNode1.Text = "Server";
-            treeNode1.ToolTipText = "root";
+            treeNode3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            treeNode3.Name = "root";
+            treeNode3.Text = "Server";
+            treeNode3.ToolTipText = "root";
             this.tvServerList.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode3});
             this.tvServerList.Size = new System.Drawing.Size(232, 184);
             this.tvServerList.TabIndex = 45;
             this.tvServerList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvServerList_NodeMouseClick);
@@ -336,11 +338,13 @@
             this.lvLogFile.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colFileName,
             this.colFilePath,
-            this.colDataCount});
+            this.colFileSize,
+            this.colCreateTime,
+            this.colUpdateTime});
             this.lvLogFile.HideSelection = false;
             this.lvLogFile.Location = new System.Drawing.Point(256, 162);
             this.lvLogFile.Name = "lvLogFile";
-            this.lvLogFile.Size = new System.Drawing.Size(462, 184);
+            this.lvLogFile.Size = new System.Drawing.Size(753, 184);
             this.lvLogFile.TabIndex = 46;
             this.lvLogFile.UseCompatibleStateImageBehavior = false;
             this.lvLogFile.View = System.Windows.Forms.View.Details;
@@ -348,12 +352,17 @@
             // colFileName
             // 
             this.colFileName.Text = "FileName";
-            this.colFileName.Width = 120;
+            this.colFileName.Width = 107;
             // 
             // colFilePath
             // 
             this.colFilePath.Text = "FilePath";
-            this.colFilePath.Width = 200;
+            this.colFilePath.Width = 300;
+            // 
+            // colFileSize
+            // 
+            this.colFileSize.Text = "FileSize";
+            this.colFileSize.Width = 113;
             // 
             // label2
             // 
@@ -468,10 +477,15 @@
             this.textBox6.Size = new System.Drawing.Size(239, 21);
             this.textBox6.TabIndex = 48;
             // 
-            // colDataCount
+            // colCreateTime
             // 
-            this.colDataCount.Text = "Data Count";
-            this.colDataCount.Width = 82;
+            this.colCreateTime.Text = "CreateTime";
+            this.colCreateTime.Width = 105;
+            // 
+            // colUpdateTime
+            // 
+            this.colUpdateTime.Text = "UpdateTime";
+            this.colUpdateTime.Width = 103;
             // 
             // analysis
             // 
@@ -553,7 +567,9 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox textBox6;
-        private System.Windows.Forms.ColumnHeader colDataCount;
+        private System.Windows.Forms.ColumnHeader colFileSize;
+        private System.Windows.Forms.ColumnHeader colCreateTime;
+        private System.Windows.Forms.ColumnHeader colUpdateTime;
     }
 }
 

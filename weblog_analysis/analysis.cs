@@ -1,8 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,20 +21,105 @@ namespace weblog_analysis
     {
         const int treeDepthLimit = 3;
         private TreeNode tnSelectNode = null;
+        private JToken settingJson = null;
 
         public analysis()
         {
             InitializeComponent();
+
+            // to-do
+            // setting json load
+
+            InitializeSetting();
+        }
+
+        private void InitializeSetting()
+        {
+            string rootDir = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
+            string jsonFile = Path.Combine(rootDir, "setting.json");
+
+            if (File.Exists(jsonFile))
+            {
+                using (StreamReader file = File.OpenText(jsonFile))
+                {
+                    using (JsonTextReader reader = new JsonTextReader(file))
+                    {
+                        //settingJson = (JObject)JToken.ReadFrom(reader);
+                        settingJson = JToken.Load(reader);
+                    }
+                }
+            }
+            else
+            {
+                settingJson = new JObject(
+                    new JProperty("Name", "Server"),
+                    new JProperty("Type", "root"),
+                    new JProperty("leaf", new JArray[] { })
+                );
+
+                File.WriteAllText(jsonFile, settingJson.ToString());
+            }
+
+            DisplayTreeView(settingJson, "root");
+        }
+
+        private void DisplayTreeView(JToken root, string rootName)
+        {
+            tvServerList.BeginUpdate();
+            try
+            {
+                tvServerList.Nodes.Clear();
+                TreeNode tNode = tvServerList.Nodes[tvServerList.Nodes.Add(new TreeNode(rootName))];
+                tNode.Tag = root;
+
+                AddNode(root, tNode);
+
+                tvServerList.ExpandAll();
+            }
+            finally
+            {
+                tvServerList.EndUpdate();
+            }
+        }
+
+        private void AddNode(JToken token, TreeNode inTreeNode)
+        {
+            if (token == null)
+                return;
+            if (token is JValue)
+            {
+                var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(token.ToString()))];
+                childNode.Tag = token;
+            }
+            else if (token is JObject)
+            {
+                var obj = (JObject)token;
+                foreach (var property in obj.Properties())
+                {
+                    var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(property.Name))];
+                    childNode.Tag = property;
+                    AddNode(property.Value, childNode);
+                }
+            }
+            else if (token is JArray)
+            {
+                var array = (JArray)token;
+                for (int i = 0; i < array.Count; i++)
+                {
+                    var childNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(i.ToString()))];
+                    childNode.Tag = array[i];
+                    AddNode(array[i], childNode);
+                }
+            }
+            else
+            {
+                Debug.WriteLine(string.Format("{0} not implemented", token.Type)); // JConstructor, JRaw
+            }
         }
 
         private void analysis_Load(object sender, EventArgs e)
         {
             tvServerList.ExpandAll();
-        }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void tvServerList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -130,6 +220,46 @@ namespace weblog_analysis
                 {
                     tnParentNode.Nodes.Remove(tnSelectNode);
                     tvServerList.SelectedNode = tnParentNode;
+                }
+            }
+        }
+
+        private void btnSearchFilePath_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            openFileDialog.DefaultExt = "log";
+            openFileDialog.Filter = "Log Files (*.log)|*.log|" +
+                                    "All files (*.*)|*.*";
+
+            openFileDialog.Multiselect = true;
+            openFileDialog.Title = "Select log files";
+
+            DialogResult dr = openFileDialog.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                string dir = openFileDialog.InitialDirectory;
+                
+                foreach (string file in openFileDialog.FileNames)
+                {
+                    string filepath = Path.Combine(dir, file);
+
+                    if (File.Exists(filepath))
+                    {
+                        FileInfo info = new FileInfo(filepath);
+
+                        DateTime dtCreateTime = info.CreationTime;
+                        DateTime dtUpdateTime = info.LastWriteTime;
+                        long fileSize = info.Length; // Byte
+
+                        ListViewItem lvItem = new ListViewItem(new string[] { file, Path.Combine(dir, file)
+                                                                            , fileSize.ToString()
+                                                                            , dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                            , dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                                            });
+
+                        lvLogFile.Items.Add(lvItem);
+                    }
                 }
             }
         }
