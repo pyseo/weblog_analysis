@@ -24,7 +24,6 @@ namespace weblog_analysis
         private const int treeDepthLimit = 3;
         private TreeNode tnSelectNode = null;
         private JToken settingJson = null;
-        private JObject selectJObject = null;
 
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section, string key, string val, string filepath);
@@ -43,10 +42,34 @@ namespace weblog_analysis
 
         private void InitializeSetting()
         {
-            // json file
+            // ini file
             //string rootDir = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
             //string rootDir = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string rootDir = Environment.CurrentDirectory;
+            string iniFile = Path.Combine(rootDir, "setting.ini");
+            if (!File.Exists(iniFile))
+            {
+                WritePrivateProfileString("pattern", "include", ".do;.jsp", iniFile);
+                WritePrivateProfileString("pattern", "exclude", ".js;.css;.gif;.png;.jpg;.ico;.jpe;.jpeg;.bmp;.tif;.tiff;.html;.htm", iniFile);
+                WritePrivateProfileString("option", "analysis_term(min)", "5", iniFile);
+            }
+
+            StringBuilder sbValue = new StringBuilder(512);
+            GetPrivateProfileString("pattern", "include", "", sbValue, sbValue.Capacity, iniFile);
+            tbIncludePattern.Text = sbValue.ToString();
+
+            sbValue.Clear();
+            GetPrivateProfileString("pattern", "exclude", "", sbValue, sbValue.Capacity, iniFile);
+            tbExcludePattern.Text = sbValue.ToString();
+
+
+            // term
+            sbValue.Clear();
+            GetPrivateProfileString("option", "analysis_term(min)", "", sbValue, sbValue.Capacity, iniFile);
+            cbxAnalysisTerm.SelectedIndex = cbxAnalysisTerm.Items.IndexOf(sbValue.ToString());
+
+
+            // json file
             string jsonFile = Path.Combine(rootDir, "setting.json");
 
             if (File.Exists(jsonFile))
@@ -70,29 +93,6 @@ namespace weblog_analysis
             }
 
             DisplayTreeView(settingJson);
-
-
-            // ini file
-            string iniFile = Path.Combine(rootDir, "setting.ini");
-            if (!File.Exists(iniFile))
-            {
-                WritePrivateProfileString("pattern", "include", ".do;.jsp", iniFile);
-                WritePrivateProfileString("pattern", "exclude", ".js;.css;.gif;.png;.jpg;.ico;.jpe;.jpeg;.bmp;.tif;.tiff;.html;.htm", iniFile);
-                WritePrivateProfileString("option", "analysis_term(min)", "5", iniFile);
-            }
-
-            StringBuilder sbValue = new StringBuilder(512);
-            GetPrivateProfileString("pattern", "include", "", sbValue, sbValue.Capacity, iniFile);
-            tbIncludePattern.Text = sbValue.ToString();
-
-            sbValue.Clear();
-            GetPrivateProfileString("pattern", "exclude", "", sbValue, sbValue.Capacity, iniFile);
-            tbExcludePattern.Text = sbValue.ToString();
-
-            // term
-            sbValue.Clear();
-            GetPrivateProfileString("option", "analysis_term(min)", "", sbValue, sbValue.Capacity, iniFile);
-            cbxAnalysisTerm.SelectedIndex = cbxAnalysisTerm.Items.IndexOf(sbValue.ToString());
         }
 
         private void DisplayTreeView(JToken root)
@@ -124,12 +124,12 @@ namespace weblog_analysis
 
                 if (obj["name"] != null)
                 {
-                    string childrenName = obj.Property("name").Value.ToString();
-                    TreeNode childrenNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(childrenName))];
-                    //childrenNode.Tag = obj.Property("files").Value;
-                    childrenNode.Tag = token;
+                    string newNodeName = obj.Property("name").Value.ToString();
+                    TreeNode newNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(newNodeName))];
+                    //newNode.Tag = obj.Property("files").Value;
+                    newNode.Tag = obj;
 
-                    AddNode(obj.Property("children").Value, childrenNode);
+                    AddNode(obj.Property("children").Value, newNode);
                 }
             }
             else if (token is JArray)
@@ -138,12 +138,12 @@ namespace weblog_analysis
 
                 foreach (JObject obj in array)
                 {
-                    string childrenName = obj.Property("name").Value.ToString();
-                    TreeNode childrenNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(childrenName))];
-                    //childrenNode.Tag = obj.Property("files").Value;
-                    childrenNode.Tag = token;
+                    string newNodeName = obj.Property("name").Value.ToString();
+                    TreeNode newNode = inTreeNode.Nodes[inTreeNode.Nodes.Add(new TreeNode(newNodeName))];
+                    //newNode.Tag = obj.Property("files").Value;
+                    newNode.Tag = obj;
 
-                    AddNode(obj.Property("children").Value, childrenNode);
+                    AddNode(obj.Property("children").Value, newNode);
                 }
             }
             else
@@ -159,9 +159,9 @@ namespace weblog_analysis
 
         private void tvServerList_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            tvServerList.SelectedNode = e.Node;
             int level = e.Node.Level;
-            
+            tvServerList.SelectedNode = e.Node;
+
             if (e.Button == MouseButtons.Right && e.Node.Bounds.Contains(e.Location))
             {
                 // root
@@ -196,36 +196,38 @@ namespace weblog_analysis
             }
         }
 
-        private void tvServerList_MouseDown(object sender, MouseEventArgs e)
-        {
-            tnSelectNode = tvServerList.GetNodeAt(e.X, e.Y);
-        }
-
         private void tvServerList_AfterSelect(object sender, TreeViewEventArgs e)
         {
             lvLogFile.Items.Clear();
 
-            TreeNode currentNode = e.Node;
+            tnSelectNode = e.Node;
 
-            if (currentNode.Tag != null && ((JArray)((JObject)currentNode.Tag).Property("files").Value).Count > 0)
+            if (tnSelectNode.Tag != null)
             {
-                JArray files = (JArray)((JObject)currentNode.Tag).Property("files").Value;
+                JObject obj = (JObject)tnSelectNode.Tag;
+                JToken token = obj.Property("files").Value;
 
-                foreach (JObject file in files)
+                if (token.Type != JTokenType.Null)
                 {
-                    string[] data = new string[]
+                    JArray files = (JArray)obj.Property("files").Value;
+
+                    foreach (JObject file in files)
                     {
+                        string[] data = new string[]
+                        {
                         "",
                         file.Property("filename").Value.ToString(),
                         file.Property("filepath").Value.ToString(),
                         file.Property("size").Value.ToString(),
                         file.Property("created").Value.ToString(),
                         file.Property("updated").Value.ToString()
-                    };
+                        };
 
-                    ListViewItem lvItem = new ListViewItem( data);
-                    lvLogFile.Items.Add(lvItem);
+                        ListViewItem lvItem = new ListViewItem(data);
+                        lvLogFile.Items.Add(lvItem);
+                    }
                 }
+                
             }
         }
 
@@ -279,25 +281,93 @@ namespace weblog_analysis
 
         private void tvServerList_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
-            JArray children = (JArray)((JObject)tnSelectNode.Tag).Property("children").Value;
-            
-            bool isNew = children.Any(x => ((JObject)x).Property("name").Value.ToString() == e.Node.Text);
-
-            JObject jsonObj = new JObject();
-            jsonObj.Add("name", e.Node.Text);
-            jsonObj.Add("files", null);
-            jsonObj.Add("children", null);
-
-            if (tnSelectNode.Parent is null)
+            string strLable = e.Label; // 수정된 라벨.
+            bool blnEdit = false;
+            string strMsg = "";
+            try
             {
-                ((JArray)settingJson).Add(jsonObj);
+                if (strLable == null || strLable.Length <= 0)
+                {
+                    strMsg = "The label cannot be blank";
+                }
+                else
+                {
+                    // 특수문자 검사 
+                    if (strLable.IndexOfAny(new char[] { '@', '.', ',', '!' }) == -1)
+                    {
+                        // 특수문자가 없으면 에디팅 종료 
+                        blnEdit = true;
+                    }
+                    else
+                    {
+                        // 특수문자가 있어서 안됩니다. 
+                        strMsg = "Invalid tree node label.\nThe invalid characters are: '@','.', ',', '!'";
+                    }
+                }
+
+                if (blnEdit == false)
+                {
+                    e.CancelEdit = true;
+
+                    // 수정 취소 
+                    e.Node.EndEdit(true);
+
+                    // 편집한 내용이 저장되지 않고 취소되었으면 true이고, 그렇지 않으면 false입니다. 
+                    MessageBox.Show(strMsg, "Node Label Edit");
+                }
+                else
+                {
+                    e.CancelEdit = false;
+                    // 수정 적용 
+                    e.Node.EndEdit(false);
+                    // 편집 내용 저장 후 종료 
+                }
+            }
+            catch (System.Exception ex)
+            {
+                //nothing
+            }
+            finally
+            {
+                //nothing
+            }
+
+            JObject selectJObject = (JObject)tnSelectNode.Tag;
+
+            bool isNew = tnSelectNode.Level == e.Node.Level ? false : true;
+
+            if (isNew)
+            {
+                JObject jsonObj = new JObject();
+                jsonObj.Add("name", e.Node.Text);
+                jsonObj.Add("files", null);
+                jsonObj.Add("children", null);
+
+                if (tnSelectNode.Parent is null)
+                {
+                    ((JArray)settingJson).Add(jsonObj);
+                }
+                else
+                {
+                    ((JArray)selectJObject.Property("children").Value).Add(jsonObj);
+                }
+
+                e.Node.Tag = jsonObj;
             }
             else
             {
-                
-                children.Add(jsonObj);
+                selectJObject.Property("name").Value = e.Label;
             }
         }
+
+
+        // 에디팅 종료시 이벤트 ,, 특수문자가 오면 안되게 설정
+        private void treeView1_AfterLabelEdit(object sender, System.Windows.Forms.NodeLabelEditEventArgs e) { 
+
+             } . // 수정 취소 e.Node.EndEdit(true);// 편집한 내용이 저장되지 않고 취소되었으면 true이고, 그렇지 않으면 false입니다. MessageBox.Show(strMsg, "Node Label Edit"); } else { e.CancelEdit = false; // 수정 적용 e.Node.EndEdit(false);// 편집 내용 저장 후 종료 } } catch (System.Exception ex) { } finally { }
+}
+
+
 
         private void btnSearchFilePath_Click(object sender, EventArgs e)
         {

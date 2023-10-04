@@ -155,7 +155,6 @@
             this.tvServerList.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvServerList_AfterLabelEdit);
             this.tvServerList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvServerList_AfterSelect);
             this.tvServerList.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvServerList_NodeMouseClick);
-            this.tvServerList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvServerList_MouseDown);
             // 
             // ctxmServerTree
             // 
