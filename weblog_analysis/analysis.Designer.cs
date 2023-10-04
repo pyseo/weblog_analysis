@@ -52,20 +52,20 @@
             this.colCreateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colUpdateTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnLogFileAdd = new System.Windows.Forms.Button();
+            this.btnLogFileRemove = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.tbIncludePattern = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbxAnalysisTerm = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tbExcludePattern = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
-            this.cbxAnalysisTerm = new System.Windows.Forms.ComboBox();
             this.mnsMain.SuspendLayout();
             this.ctxmServerTree.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -200,6 +200,7 @@
             this.lvLogFile.GridLines = true;
             this.lvLogFile.HideSelection = false;
             this.lvLogFile.Location = new System.Drawing.Point(241, 61);
+            this.lvLogFile.MultiSelect = false;
             this.lvLogFile.Name = "lvLogFile";
             this.lvLogFile.OwnerDraw = true;
             this.lvLogFile.Size = new System.Drawing.Size(768, 184);
@@ -250,24 +251,27 @@
             this.label2.TabIndex = 47;
             this.label2.Text = "[Server Log Files]";
             // 
-            // button1
+            // btnLogFileAdd
             // 
-            this.button1.Location = new System.Drawing.Point(871, 251);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(66, 23);
-            this.button1.TabIndex = 48;
-            this.button1.Text = "파일추가";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnSearchFilePath_Click);
+            this.btnLogFileAdd.Enabled = false;
+            this.btnLogFileAdd.Location = new System.Drawing.Point(871, 251);
+            this.btnLogFileAdd.Name = "btnLogFileAdd";
+            this.btnLogFileAdd.Size = new System.Drawing.Size(66, 23);
+            this.btnLogFileAdd.TabIndex = 48;
+            this.btnLogFileAdd.Text = "파일추가";
+            this.btnLogFileAdd.UseVisualStyleBackColor = true;
+            this.btnLogFileAdd.Click += new System.EventHandler(this.btnSearchFilePath_Click);
             // 
-            // button2
+            // btnLogFileRemove
             // 
-            this.button2.Location = new System.Drawing.Point(943, 251);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(66, 23);
-            this.button2.TabIndex = 49;
-            this.button2.Text = "제거";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnLogFileRemove.Enabled = false;
+            this.btnLogFileRemove.Location = new System.Drawing.Point(943, 251);
+            this.btnLogFileRemove.Name = "btnLogFileRemove";
+            this.btnLogFileRemove.Size = new System.Drawing.Size(66, 23);
+            this.btnLogFileRemove.TabIndex = 49;
+            this.btnLogFileRemove.Text = "파일제거";
+            this.btnLogFileRemove.UseVisualStyleBackColor = true;
+            this.btnLogFileRemove.Click += new System.EventHandler(this.btnLogFileRemove_Click);
             // 
             // button3
             // 
@@ -326,6 +330,21 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(991, 184);
             this.tableLayoutPanel2.TabIndex = 51;
             // 
+            // cbxAnalysisTerm
+            // 
+            this.cbxAnalysisTerm.FormattingEnabled = true;
+            this.cbxAnalysisTerm.Items.AddRange(new object[] {
+            "5",
+            "10",
+            "15",
+            "20",
+            "30",
+            "60"});
+            this.cbxAnalysisTerm.Location = new System.Drawing.Point(223, 33);
+            this.cbxAnalysisTerm.Name = "cbxAnalysisTerm";
+            this.cbxAnalysisTerm.Size = new System.Drawing.Size(61, 20);
+            this.cbxAnalysisTerm.TabIndex = 54;
+            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -339,16 +358,6 @@
             this.label4.TabIndex = 51;
             this.label4.Text = "Content Pattern";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(113, 39);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(88, 12);
-            this.label6.TabIndex = 52;
-            this.label6.Text = "Analysis Term";
             // 
             // label8
             // 
@@ -378,6 +387,16 @@
             this.tbExcludePattern.Size = new System.Drawing.Size(380, 21);
             this.tbExcludePattern.TabIndex = 55;
             // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(113, 39);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(88, 12);
+            this.label6.TabIndex = 52;
+            this.label6.Text = "Analysis Term";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -397,21 +416,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // cbxAnalysisTerm
-            // 
-            this.cbxAnalysisTerm.FormattingEnabled = true;
-            this.cbxAnalysisTerm.Items.AddRange(new object[] {
-            "5",
-            "10",
-            "15",
-            "20",
-            "30",
-            "60"});
-            this.cbxAnalysisTerm.Location = new System.Drawing.Point(223, 33);
-            this.cbxAnalysisTerm.Name = "cbxAnalysisTerm";
-            this.cbxAnalysisTerm.Size = new System.Drawing.Size(61, 20);
-            this.cbxAnalysisTerm.TabIndex = 54;
-            // 
             // analysis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
@@ -421,8 +425,8 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnLogFileRemove);
+            this.Controls.Add(this.btnLogFileAdd);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lvLogFile);
             this.Controls.Add(this.tvServerList);
@@ -460,8 +464,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ColumnHeader colFileName;
         private System.Windows.Forms.ColumnHeader colFilePath;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnLogFileAdd;
+        private System.Windows.Forms.Button btnLogFileRemove;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ColumnHeader colFileSize;
         private System.Windows.Forms.ColumnHeader colCreateTime;

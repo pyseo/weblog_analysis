@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace weblog_analysis
 {
@@ -102,6 +103,7 @@ namespace weblog_analysis
             {
                 tvServerList.Nodes.Clear();
                 TreeNode tNode = tvServerList.Nodes[tvServerList.Nodes.Add(new TreeNode("Server"))];
+                tNode.BackColor = Color.FromArgb(255, 192, 192);
 
                 AddNode(root, tNode);
 
@@ -229,6 +231,15 @@ namespace weblog_analysis
                 }
                 
             }
+
+            if (tnSelectNode.Parent is null)
+            {
+                btnLogFileAdd.Enabled = false;
+            }
+            else 
+            {
+                btnLogFileAdd.Enabled = true;
+            }
         }
 
 
@@ -273,6 +284,18 @@ namespace weblog_analysis
                 
                 if (result == DialogResult.OK)
                 {
+                    string removeNodeName = ((JObject)tnSelectNode.Tag).Property("name").Value.ToString();
+
+                    if (tnParentNode.Parent is null)
+                    {
+                        settingJson.First(x => ((JObject)x).Property("name").Value.ToString() == removeNodeName).Remove();
+                    }
+                    else
+                    {
+                        JArray children = (JArray)((JObject)tnParentNode.Tag).Property("children").Value;
+                        children.First(x => ((JObject)x).Property("name").Value.ToString() == removeNodeName).Remove();
+                    }
+
                     tnParentNode.Nodes.Remove(tnSelectNode);
                     tvServerList.SelectedNode = tnParentNode;
                 }
@@ -282,45 +305,18 @@ namespace weblog_analysis
         private void tvServerList_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             string strLable = e.Label; // 수정된 라벨.
-            bool blnEdit = false;
-            string strMsg = "";
             try
             {
                 if (strLable == null || strLable.Length <= 0)
                 {
-                    strMsg = "The label cannot be blank";
-                }
-                else
-                {
-                    // 특수문자 검사 
-                    if (strLable.IndexOfAny(new char[] { '@', '.', ',', '!' }) == -1)
-                    {
-                        // 특수문자가 없으면 에디팅 종료 
-                        blnEdit = true;
-                    }
-                    else
-                    {
-                        // 특수문자가 있어서 안됩니다. 
-                        strMsg = "Invalid tree node label.\nThe invalid characters are: '@','.', ',', '!'";
-                    }
-                }
-
-                if (blnEdit == false)
-                {
-                    e.CancelEdit = true;
-
-                    // 수정 취소 
+                    e.CancelEdit = true;// 수정 취소 
                     e.Node.EndEdit(true);
-
-                    // 편집한 내용이 저장되지 않고 취소되었으면 true이고, 그렇지 않으면 false입니다. 
-                    MessageBox.Show(strMsg, "Node Label Edit");
+                    strLable = e.Node.Text;// 이전 텍스트
                 }
                 else
                 {
-                    e.CancelEdit = false;
-                    // 수정 적용 
-                    e.Node.EndEdit(false);
-                    // 편집 내용 저장 후 종료 
+                    e.CancelEdit = false;// 수정 적용 
+                    e.Node.EndEdit(false);// 편집 내용 저장 후 종료 
                 }
             }
             catch (System.Exception ex)
@@ -338,10 +334,9 @@ namespace weblog_analysis
 
             if (isNew)
             {
-                JObject jsonObj = new JObject();
-                jsonObj.Add("name", e.Node.Text);
-                jsonObj.Add("files", null);
-                jsonObj.Add("children", null);
+                JObject jsonObj = new JObject(new JProperty("name", strLable),
+                                              new JProperty("files", new JArray[] { }),
+                                              new JProperty("children", new JArray[] { }));
 
                 if (tnSelectNode.Parent is null)
                 {
@@ -356,18 +351,9 @@ namespace weblog_analysis
             }
             else
             {
-                selectJObject.Property("name").Value = e.Label;
+                selectJObject.Property("name").Value = strLable;
             }
         }
-
-
-        // 에디팅 종료시 이벤트 ,, 특수문자가 오면 안되게 설정
-        private void treeView1_AfterLabelEdit(object sender, System.Windows.Forms.NodeLabelEditEventArgs e) { 
-
-             } . // 수정 취소 e.Node.EndEdit(true);// 편집한 내용이 저장되지 않고 취소되었으면 true이고, 그렇지 않으면 false입니다. MessageBox.Show(strMsg, "Node Label Edit"); } else { e.CancelEdit = false; // 수정 적용 e.Node.EndEdit(false);// 편집 내용 저장 후 종료 } } catch (System.Exception ex) { } finally { }
-}
-
-
 
         private void btnSearchFilePath_Click(object sender, EventArgs e)
         {
@@ -473,23 +459,43 @@ namespace weblog_analysis
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string rootDir = Environment.CurrentDirectory;
-            string iniFile = Path.Combine(rootDir, "setting.ini");
-
-            if (File.Exists(iniFile))
+            DialogResult messageResult = MessageBox.Show(this, "Save this settings?", "Save", MessageBoxButtons.OKCancel);
+            if (messageResult == DialogResult.OK)
             {
-                WritePrivateProfileString("pattern", "include", tbIncludePattern.Text, iniFile);
-                WritePrivateProfileString("pattern", "exclude", tbExcludePattern.Text, iniFile);
-                WritePrivateProfileString("option", "analysis_term(min)", cbxAnalysisTerm.SelectedItem.ToString(), iniFile);
-            }
+                string rootDir = Environment.CurrentDirectory;
+                string iniFile = Path.Combine(rootDir, "setting.ini");
 
-            string jsonFile = Path.Combine(rootDir, "setting.json");
-            if (File.Exists(jsonFile))
-            {
-                File.WriteAllText(jsonFile, settingJson.ToString());
+                if (File.Exists(iniFile))
+                {
+                    WritePrivateProfileString("pattern", "include", tbIncludePattern.Text, iniFile);
+                    WritePrivateProfileString("pattern", "exclude", tbExcludePattern.Text, iniFile);
+                    WritePrivateProfileString("option", "analysis_term(min)", cbxAnalysisTerm.SelectedItem.ToString(), iniFile);
+                }
+
+                string jsonFile = Path.Combine(rootDir, "setting.json");
+                if (File.Exists(jsonFile))
+                {
+                    File.WriteAllText(jsonFile, settingJson.ToString());
+                }
             }
         }
 
-       
+        private void btnLogFileRemove_Click(object sender, EventArgs e)
+        {
+            //todo
+        }
+
+        //private void lvLogFile_ItemChecked(object sender, ItemCheckedEventArgs e)
+        //{
+        //    bool isChecked = lvLogFile.CheckedItems.OfType<ListViewItem>().Any(x => x.Checked == true);
+        //    if (isChecked)
+        //    {
+        //        btnLogFileRemove.Enabled = true;
+        //    }
+        //    else
+        //    {
+        //        btnLogFileRemove.Enabled = false;
+        //    }
+        //}
     }
 }
