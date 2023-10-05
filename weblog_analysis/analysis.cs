@@ -1,22 +1,15 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using weblog_analysis.util.db;
 
 namespace weblog_analysis
 {
@@ -242,7 +235,6 @@ namespace weblog_analysis
             }
         }
 
-
         private void ctxmiAdd_Click(object sender, EventArgs e)
         {
             TreeNode newNode = new TreeNode("New");
@@ -355,60 +347,6 @@ namespace weblog_analysis
             }
         }
 
-        private void btnSearchFilePath_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
-            openFileDialog.DefaultExt = "log";
-            openFileDialog.Filter = "Log Files (*.log)|*.log|" +
-                                    "All files (*.*)|*.*";
-
-            openFileDialog.Multiselect = true;
-            openFileDialog.Title = "Select log files";
-
-            DialogResult dr = openFileDialog.ShowDialog();
-            if (dr == DialogResult.OK)
-            {
-                string dir = openFileDialog.InitialDirectory;
-                
-                foreach (string file in openFileDialog.FileNames)
-                {
-                    string filename = Path.GetFileName(file);
-                    string filepath = Path.Combine(dir, file);
-
-                    if (File.Exists(filepath))
-                    {
-                        FileInfo info = new FileInfo(filepath);
-
-                        DateTime dtCreateTime = info.CreationTime;
-                        DateTime dtUpdateTime = info.LastWriteTime;
-                        long fileSize = info.Length; // Byte
-
-                        string[] data = new string[] { ""
-                                                     , filename
-                                                     , filepath
-                                                     , fileSize.ToString()
-                                                     , dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                                                     , dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss")
-                                                     };
-
-                        ListViewItem lvItem = new ListViewItem(data);
-                        lvLogFile.Items.Add(lvItem);
-
-                        JObject jsonObj = new JObject();
-                        jsonObj.Add("filename", filename);
-                        jsonObj.Add("filepath", filepath);
-                        jsonObj.Add("size", fileSize.ToString());
-                        jsonObj.Add("created", dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss"));
-                        jsonObj.Add("updated", dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss"));
-
-                        JArray files = (JArray)((JObject)tnSelectNode.Tag).Property("files").Value;
-                        files.Add(jsonObj);
-                    }
-                }
-            }
-        }
-
         private void lvLogFile_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             if (e.Column == 0)
@@ -457,6 +395,7 @@ namespace weblog_analysis
             e.DrawDefault = true;
         }
 
+        #region Button
         private void btnSave_Click(object sender, EventArgs e)
         {
             DialogResult messageResult = MessageBox.Show(this, "Save this settings?", "Save", MessageBoxButtons.OKCancel);
@@ -480,10 +419,82 @@ namespace weblog_analysis
             }
         }
 
+        private void btnSearchFilePath_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+            openFileDialog.DefaultExt = "log";
+            openFileDialog.Filter = "Log Files (*.log)|*.log|" +
+                                    "All files (*.*)|*.*";
+
+            openFileDialog.Multiselect = true;
+            openFileDialog.Title = "Select log files";
+
+            DialogResult dr = openFileDialog.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                string dir = openFileDialog.InitialDirectory;
+
+                foreach (string file in openFileDialog.FileNames)
+                {
+                    string filename = Path.GetFileName(file);
+                    string filepath = Path.Combine(dir, file);
+
+                    if (File.Exists(filepath))
+                    {
+                        FileInfo info = new FileInfo(filepath);
+
+                        DateTime dtCreateTime = info.CreationTime;
+                        DateTime dtUpdateTime = info.LastWriteTime;
+                        long fileSize = info.Length; // Byte
+
+                        string[] data = new string[] { ""
+                                                     , filename
+                                                     , filepath
+                                                     , fileSize.ToString()
+                                                     , dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                     , dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss")
+                                                     };
+
+                        ListViewItem lvItem = new ListViewItem(data);
+                        lvLogFile.Items.Add(lvItem);
+
+                        JObject jsonObj = new JObject();
+                        jsonObj.Add("filename", filename);
+                        jsonObj.Add("filepath", filepath);
+                        jsonObj.Add("size", fileSize.ToString());
+                        jsonObj.Add("created", dtCreateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                        jsonObj.Add("updated", dtUpdateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                        JArray files = (JArray)((JObject)tnSelectNode.Tag).Property("files").Value;
+                        files.Add(jsonObj);
+                    }
+                }
+            }
+        }
+
         private void btnLogFileRemove_Click(object sender, EventArgs e)
         {
-            //todo
+            DialogResult messageResult = MessageBox.Show(this, "Remove checked item?", "Remove", MessageBoxButtons.OKCancel);
+            if (messageResult == DialogResult.OK)
+            {
+                List<int> checkedIdxList = lvLogFile.CheckedItems.OfType<ListViewItem>().Select(x => x.Index).ToList();
+
+                if (checkedIdxList.Count > 0)
+                {
+                    foreach (int idx in checkedIdxList.Reverse<int>())
+                    {
+                        ListViewItem item = lvLogFile.Items[idx];
+
+                        lvLogFile.Items[idx].Remove();
+
+                        JArray files = (JArray)((JObject)tnSelectNode.Tag).Property("files").Value;
+                        files.RemoveAt(idx);
+                    }
+                }
+            }
         }
+        #endregion
 
         //private void lvLogFile_ItemChecked(object sender, ItemCheckedEventArgs e)
         //{

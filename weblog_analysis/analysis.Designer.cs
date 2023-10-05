@@ -264,7 +264,6 @@
             // 
             // btnLogFileRemove
             // 
-            this.btnLogFileRemove.Enabled = false;
             this.btnLogFileRemove.Location = new System.Drawing.Point(943, 251);
             this.btnLogFileRemove.Name = "btnLogFileRemove";
             this.btnLogFileRemove.Size = new System.Drawing.Size(66, 23);
