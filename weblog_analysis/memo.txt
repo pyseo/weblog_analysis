@@ -19,6 +19,29 @@ https://httpd.apache.org/docs/2.4/ko/logs.html
 https://naver.me/5ITV5F9S
 
 
+Apache Access Log format
+https://httpd.apache.org/docs/2.4/ko/logs.html
+regular pattern example
+IP(n)	(.*)	140.206.89.64, 211.95.78.82, 14.0.68.221 14.0.68.221
+DATE(Common)	\[(\d{2}/\w{3}/\d{4}):(\d{2}:\d{2}:\d{2}) ([+\-]\d{4})\]	[09/Apr/2014:23:02:18 +0900]
+DATE	(\d{2}/\w{3}/\d{4}):(\d{2}:\d{2}:\d{2})	09/Apr/2014:23:02:18
+DATE-A	(\d{4}-\d{2}-\d{2})	2001-06-10
+DATE-B	(\d{4}.\d{2}.\d{2})	2001.06.10
+DATE-C	(\d{4}/\d{2}/\d{2})	2001/06/10
+DATE-D	(\d{2}/\w{3}/\d{4})	09/Apr/2014
+TIME	(\d{2}:\d{2}:\d{2})	12:00:05
+Method	(POST|GET|HEAD|TRACE|PUT|DELETE|OPTION|CONNECT)	GET
+URL	(.*)	/abc.jsp?ab=
+Protocol	(.+?)	HTTP/1.1
+STATUS	(\d+)	200
+ResByte	(-|\d+)	12121 or -
+ResTime(Microsecond)	(\d+)	1213134
+ResTime(ms)	(\d+)([a-z]+)	212ms
+Any	(.*)	Mozilla/4.0 (compatible; MSIE 8.0; ~~~
+-	\-	-
+"	"	"
+IP
+
 largefile �ڵ鸵
 https://stackoverflow.com/questions/17188357/read-large-txt-file-multithreaded
 var inputLines = new BlockingCollection<string>();
